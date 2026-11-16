@@ -1,0 +1,20 @@
+# Publicação no Render (plano gratuito). No painel do Render: New → Blueprint → escolha este repositório.
+services:
+  - type: web
+    name: portal-lucasleoncine
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/saude
+    envVars:
+      - key: PAINEL_SENHA        # senha do painel do gabinete (o Render pede para você digitar)
+        sync: false
+      - key: PAINEL_USUARIO
+        value: gabinete
+      - key: SEGREDO_IP
+        generateValue: true
+      - key: CONFIAR_PROXY
+        value: "1"
+      - key: MAPA_CONTATO
+        value: gabinete

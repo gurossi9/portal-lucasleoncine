@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Painel de Demandas | Gabinete</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="painel.css">
+</head>
+<body>
+  <header class="topo">
+    <div class="topo__marca">
+      <span class="topo__selo"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9.5 12 4l9 5.5M5 10v8M9.5 10v8M14.5 10v8M19 10v8M3 20.5h18"/></svg></span>
+      <div><strong>Gabinete Lucas Leoncine</strong><small>Painel de Demandas</small></div>
+    </div>
+    <div class="topo__acoes">
+      <a class="btn btn--claro" id="btn-csv" href="#">Baixar relatório (CSV)</a>
+      <button class="btn btn--claro" id="btn-imprimir" type="button">Imprimir</button>
+    </div>
+  </header>
+
+  <main class="conteudo">
+    <!-- Filtros -->
+    <section class="filtros" aria-label="Filtros">
+      <label>De<input type="date" id="f-de"></label>
+      <label>Até<input type="date" id="f-ate"></label>
+      <label>Categoria<select id="f-categoria"><option value="">Todas</option></select></label>
+      <label>Bairro<select id="f-bairro"><option value="">Todos</option></select></label>
+      <label>Situação<select id="f-status"><option value="">Todas</option></select></label>
+      <label class="filtros__busca">Buscar<input type="search" id="f-busca" placeholder="Protocolo, nome, rua…"></label>
+      <div class="filtros__atalhos">
+        <button type="button" data-periodo="7">7 dias</button>
+        <button type="button" data-periodo="30">30 dias</button>
+        <button type="button" data-periodo="ano">Este ano</button>
+        <button type="button" data-periodo="">Tudo</button>
+        <button type="button" id="btn-limpar" class="link">Limpar filtros</button>
+      </div>
+    </section>
+
+    <!-- KPIs -->
+    <section class="kpis" id="kpis" aria-live="polite"></section>
+
+    <div class="grade">
+      <section class="cartao cartao--largo">
+        <header class="cartao__topo"><h2>Indicações por bairro</h2><span class="legenda"><i class="l-aberto"></i>Em aberto <i class="l-atendida"></i>Atendidas <i class="l-outras"></i>Outras</span></header>
+        <div id="g-bairros" class="barras"></div>
+      </section>
+
+      <section class="cartao">
+        <header class="cartao__topo"><h2>Por categoria</h2></header>
+        <div id="g-categorias" class="barras"></div>
+      </section>
+
+      <section class="cartao">
+        <header class="cartao__topo"><h2>Demandas por mês</h2></header>
+        <div id="g-meses" class="colunas"></div>
+      </section>
+
+      <section class="cartao cartao--largo">
+        <header class="cartao__topo"><h2>Bairro × categoria</h2><span class="dica">Clique numa célula para filtrar</span></header>
+        <div class="tabela-rolagem"><table id="t-matriz" class="matriz"></table></div>
+      </section>
+
+      <section class="cartao cartao--largo">
+        <header class="cartao__topo"><h2>Relatório de demandas</h2><span class="dica" id="total-lista"></span></header>
+        <div class="tabela-rolagem">
+          <table class="lista">
+            <thead><tr><th>Protocolo</th><th>Data</th><th>Bairro</th><th>Local</th><th>Categoria</th><th>Situação</th><th>Indicação</th></tr></thead>
+            <tbody id="t-lista"></tbody>
+          </table>
+        </div>
+        <div class="paginacao"><button type="button" id="pg-ant">‹ Anterior</button><span id="pg-info"></span><button type="button" id="pg-prox">Próxima ›</button></div>
+      </section>
+    </div>
+  </main>
+
+  <!-- Gaveta de detalhe -->
+  <div class="veu" id="veu" hidden></div>
+  <aside class="gaveta" id="gaveta" hidden aria-modal="true" role="dialog" aria-labelledby="d-protocolo">
+    <header class="gaveta__topo">
+      <div><small>Protocolo</small><h2 id="d-protocolo"></h2></div>
+      <button type="button" class="fechar" id="btn-fechar" aria-label="Fechar">×</button>
+    </header>
+    <div class="gaveta__corpo" id="d-corpo"></div>
+  </aside>
+
+  <script src="painel.js"></script>
+</body>
+</html>

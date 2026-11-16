@@ -1,0 +1,8 @@
+# Troque pelo domínio do portal (o DNS precisa apontar para este servidor)
+demandas.lucasleoncine.com.br {
+	encode gzip
+	request_body {
+		max_size 12MB
+	}
+	reverse_proxy portal:3000
+}

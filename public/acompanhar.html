@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Acompanhar protocolo | Vereador Lucas Leoncine</title>
+  <meta name="theme-color" content="#012355">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="hero hero--curto">
+    <div class="hero__grid" aria-hidden="true"></div>
+    <div class="hero__inner">
+      <p class="hero__cargo">Vereador · Americana/SP</p>
+      <h1 class="hero__titulo">Acompanhe sua <strong>demanda</strong></h1>
+      <p class="hero__sub">Digite o número do protocolo e os 4 últimos dígitos do WhatsApp usado no cadastro.</p>
+    </div>
+  </header>
+  <main class="wrap">
+    <form class="card" id="consulta" novalidate>
+      <fieldset class="secao">
+        <div class="campo">
+          <label for="protocolo">Número do protocolo</label>
+          <input id="protocolo" name="protocolo" type="text" placeholder="LL-2026-000123" autocapitalize="characters" required maxlength="20">
+        </div>
+        <div class="campo">
+          <label for="final">4 últimos dígitos do WhatsApp</label>
+          <input id="final" name="final" type="tel" inputmode="numeric" placeholder="1234" required maxlength="4" pattern="\d{4}">
+        </div>
+      </fieldset>
+      <button class="btn-enviar" type="submit"><span class="btn-enviar__txt">Consultar</span><span class="spinner" aria-hidden="true"></span></button>
+      <p class="erro erro--geral" id="erro" role="alert"></p>
+    </form>
+
+    <section class="card resultado" id="resultado" hidden aria-live="polite">
+      <p class="resultado__rotulo">Protocolo</p>
+      <h2 id="r-protocolo"></h2>
+      <p class="resultado__status"><span id="r-status"></span></p>
+      <dl class="resultado__dados" id="r-dados"></dl>
+      <ol class="linha-tempo" id="r-historico"></ol>
+    </section>
+    <p class="voltar"><a href="./">← Registrar nova demanda</a></p>
+  </main>
+  <footer class="rodape">
+    <img class="rodape__bandeira" src="assets/bandeira-americana.png" alt="Bandeira de Americana" width="56" height="36">
+    <p>Gabinete do Vereador <strong>Lucas Leoncine</strong> · Câmara Municipal de Americana</p>
+  </footer>
+  <script src="acompanhar.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+services:
+  portal:
+    build: .
+    restart: unless-stopped
+    env_file: server/.env
+    environment:
+      PASTA_DADOS: /dados
+    volumes:
+      - dados:/dados                      # banco, fotos e documentos (faça backup desta pasta)
+      # - ./server/templates:/app/server/templates   # descomente para trocar o modelo oficial sem rebuild
+    ports:
+      - "127.0.0.1:3000:3000"             # exposto só localmente; o Caddy publica com HTTPS
+
+  caddy:                                  # HTTPS automático (Let's Encrypt)
+    image: caddy:2
+    restart: unless-stopped
+    ports: ["80:80", "443:443"]
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy:/data
+    depends_on: [portal]
+
+volumes:
+  dados:
+  caddy:

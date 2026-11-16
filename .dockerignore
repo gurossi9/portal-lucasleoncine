@@ -1,0 +1,6 @@
+.git
+server/dados
+server/.env
+node_modules
+demo-interativa.html
+docs

@@ -38,7 +38,7 @@ AVISO = re.compile(r"\[[A-ZÀ-Ú0-9][A-ZÀ-Ú0-9 :/,.\-–]*\]")
 AVISO_SEM_IMAGEM = "[INSERIR IMAGENS: MAPA DE LOCALIZAÇÃO E FOTO DO LOCAL]"
 
 ALTURA_CM = 7.0     # altura das imagens lado a lado (como nas Indicações de 2026)
-LARGURA_UTIL_CM = 15.6
+LARGURA_UTIL_CM = 15.0  # 16 cm úteis menos folga para o espaço entre as imagens
 
 
 def paragrafos(doc):
@@ -156,7 +156,7 @@ def inserir_imagens(doc, dados, usados):
             return 0
         # todas na mesma altura; se não couberem na largura útil, diminui
         larguras = [ALTURA_CM / prop for _, prop in preparadas]
-        espaco = 0.4 * (len(preparadas) - 1)
+        espaco = 0.8 * (len(preparadas) - 1)
         fator = min(1.0, (LARGURA_UTIL_CM - espaco) / sum(larguras))
         for i, (arq, prop) in enumerate(preparadas):
             if i:

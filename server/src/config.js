@@ -62,10 +62,10 @@ const config = {
     soffice: e("SOFFICE_BIN", "soffice"),
   },
 
-  /** Mapa de localização na Indicação (OpenStreetMap). Desligue com MAPA_INDICACAO=0. */
+  /** Mapa de localização na Indicação (padrão: satélite Esri; ver scripts/mapa_local.py). Desligue com MAPA_INDICACAO=0. */
   mapa: {
     ativo: bool("MAPA_INDICACAO", "1"),
-    tiles: e("MAPA_TILES_URL", "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
+    tiles: e("MAPA_TILES_URL"), // vazio = padrão do script (satélite)
     geocoder: e("MAPA_GEOCODER_URL", "https://nominatim.openstreetmap.org/search"),
     contato: e("MAPA_CONTATO", e("EMAIL_REMETENTE", "gabinete")),
   },

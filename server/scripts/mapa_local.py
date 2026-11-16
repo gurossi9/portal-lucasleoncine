@@ -29,13 +29,21 @@ import urllib.request
 
 from PIL import Image, ImageDraw, ImageFont
 
-TILES = os.environ.get("MAPA_TILES_URL") or "https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+# Padrão (16/11/2026, pedido do gabinete): imagem de SATÉLITE do Esri World Imagery,
+# com a camada de ruas e nomes de ruas do Esri por cima.
+# Para voltar ao mapa de ruas: MAPA_TILES_URL=https://tile.openstreetmap.org/{z}/{x}/{y}.png,
+# MAPA_ROTULOS_URL vazio e MAPA_CREDITO="© colaboradores do OpenStreetMap".
+ESRI = "https://server.arcgisonline.com/ArcGIS/rest/services"
+TILES = os.environ.get("MAPA_TILES_URL") or f"{ESRI}/World_Imagery/MapServer/tile/{{z}}/{{y}}/{{x}}"
+ROTULOS = os.environ.get("MAPA_ROTULOS_URL", f"{ESRI}/Reference/World_Transportation/MapServer/tile/{{z}}/{{y}}/{{x}}")
+CREDITO = os.environ.get("MAPA_CREDITO") or "Imagem: Esri, Maxar, Earthstar Geographics"
 GEOCODER = os.environ.get("MAPA_GEOCODER_URL") or "https://nominatim.openstreetmap.org/search"
 CONTATO = os.environ.get("MAPA_CONTATO") or "gabinete"
 UA = f"PortalDemandas-GabineteLucasLeoncine/1.0 ({CONTATO})"
 # caixa de Americana-SP (com folga) para recusar resultados de outras cidades
 LAT_MIN, LAT_MAX, LON_MIN, LON_MAX = -22.86, -22.62, -47.45, -47.17
-LARGURA, ALTURA, ZOOM = 900, 900, 17
+LARGURA, ALTURA = 900, 900
+ZOOM = int(os.environ.get("MAPA_ZOOM") or 18)
 
 
 def baixar(url, timeout=12):
@@ -71,8 +79,15 @@ def montar(lat, lon, saida):
     tela = Image.new("RGB", ((tx1 - tx0 + 1) * 256, (ty1 - ty0 + 1) * 256), "#e5e3df")
     for tx in range(tx0, tx1 + 1):
         for ty in range(ty0, ty1 + 1):
+            pos = ((tx - tx0) * 256, (ty - ty0) * 256)
             tile = Image.open(io.BytesIO(baixar(TILES.format(z=ZOOM, x=tx, y=ty)))).convert("RGB")
-            tela.paste(tile, ((tx - tx0) * 256, (ty - ty0) * 256))
+            tela.paste(tile, pos)
+            if ROTULOS:  # ruas e nomes por cima do satélite (PNG transparente); falha aqui não impede o mapa
+                try:
+                    rot = Image.open(io.BytesIO(baixar(ROTULOS.format(z=ZOOM, x=tx, y=ty)))).convert("RGBA")
+                    tela.paste(rot, pos, rot)
+                except Exception:
+                    pass
     ox, oy = int(x0 - tx0 * 256), int(y0 - ty0 * 256)
     mapa = tela.crop((ox, oy, ox + LARGURA, oy + ALTURA))
 
@@ -88,7 +103,7 @@ def montar(lat, lon, saida):
         fonte = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf", 18)
     except OSError:
         fonte = ImageFont.load_default()
-    txt = "© colaboradores do OpenStreetMap"
+    txt = CREDITO
     w = d.textlength(txt, font=fonte)
     d.rectangle((LARGURA - w - 16, ALTURA - 30, LARGURA, ALTURA), fill=(255, 255, 255))
     d.text((LARGURA - w - 8, ALTURA - 27), txt, fill=(60, 60, 60), font=fonte)
